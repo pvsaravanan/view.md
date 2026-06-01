@@ -1,0 +1,77 @@
+{
+  "name": "view-md",
+  "version": "1.0.0",
+  "description": "Sleek, instant, and lightweight desktop Markdown reader.",
+  "main": "dist/main/main.js",
+  "author": "Saravanan P V",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "build": "node scripts/build.js",
+    "package": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "katex": "^0.17.0",
+    "lucide-react": "^0.435.0",
+    "mermaid": "^11.15.0",
+    "prismjs": "^1.29.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.1",
+    "rehype-katex": "^7.0.1",
+    "remark-directive": "^4.0.0",
+    "remark-emoji": "^5.0.2",
+    "remark-gfm": "^4.0.0",
+    "remark-math": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "@types/prismjs": "^1.26.4",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^5.0.1",
+    "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
+    "electron": "^31.0.1",
+    "electron-builder": "^24.13.3",
+    "esbuild": "^0.21.5",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.4.5",
+    "vite": "^5.3.1"
+  },
+  "build": {
+    "appId": "com.viewmd.app",
+    "productName": "view.md",
+    "publish": null,
+    "directories": {
+      "output": "out"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "fileAssociations": [
+        {
+          "ext": [
+            "md",
+            "markdown"
+          ],
+          "name": "Markdown File",
+          "description": "Markdown Document",
+          "role": "Viewer"
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "view.md"
+    }
+  }
+}
