@@ -372,7 +372,7 @@ export const Reader: React.FC<ReaderProps> = ({ markdown, filePath, zoom }) => {
       className="flex-1 overflow-y-auto px-8 sm:px-12 md:px-20 py-8 scroll-smooth bg-zk-white dark:bg-zk-black"
       style={{ fontSize: `${(zoom / 100) * 16}px` }}
     >
-      <div className="w-full max-w-[1200px] markdown-prose text-zk-charcoal dark:text-zk-graylight leading-relaxed font-sans pb-32">
+      <div className="w-full max-w-[1200px] mx-auto markdown-prose text-zk-charcoal dark:text-zk-graylight leading-relaxed font-sans pb-32">
         {displayMarkdown.trim() === '' ? (
           <div className="h-full flex flex-col items-center justify-center py-20 text-zk-graydark dark:text-zk-graystd">
             <FileText size={48} className="opacity-30 mb-4 animate-pulse" />
