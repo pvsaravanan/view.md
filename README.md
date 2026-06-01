@@ -8,16 +8,16 @@
 
 **`view.md`** is a premium desktop Markdown reader designed to be your default `.md` handler on Windows. Built to provide a distraction-free, high-performance, and visually gorgeous alternative to firing up full-featured IDEs just to read simple documentation.
 
-## ✨ Features
+## Features
 
-- ⚡ **Instant Startup:** Tailored for a lightning-fast experience with load times under 500ms.
-- 🎨 **Premium UI:** A modern, glassmorphic design that seamlessly integrates with your operating system's light/dark modes.
-- 🔍 **Interactive Search:** Custom, keyboard-friendly `Ctrl+F` in-document search with real-time highlighting.
-- 📑 **Dynamic Table of Contents:** Resizable, auto-highlighting sidebar that tracks your reading progress.
-- 🖼️ **Secure Local Media:** Renders relative local images instantly and securely via a custom `view-media://` protocol.
-- 🪟 **Single-Instance Locking:** Double-click multiple files smoothly—they all open dynamically in your single active reader without cluttering your desktop.
+- **Instant Startup:** Tailored for a lightning-fast experience with load times under 500ms.
+- **Premium UI:** A modern, glassmorphic design that seamlessly integrates with your operating system's light/dark modes.
+- **Interactive Search:** Custom, keyboard-friendly `Ctrl+F` in-document search with real-time highlighting.
+- **Dynamic Table of Contents:** Resizable, auto-highlighting sidebar that tracks your reading progress.
+- **Secure Local Media:** Renders relative local images instantly and securely via a custom `view-media://` protocol.
+- **Single-Instance Locking:** Double-click multiple files smoothly—they all open dynamically in your single active reader without cluttering your desktop.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Framework:** [Electron](https://www.electronjs.org/) (Main process) + [React 18](https://react.dev/) (Renderer)
 - **Language:** TypeScript
@@ -27,7 +27,7 @@
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -65,7 +65,7 @@ npm run package
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 The application follows secure Electron best practices:
 
@@ -75,10 +75,10 @@ The application follows secure Electron best practices:
 
 > *For deeper structural knowledge and the full product requirements, see [`prd.md`](./prd.md).*
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please feel free to submit a Pull Request or open an Issue to discuss improvements, feature requests, or bug fixes.
 
-## 📝 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
