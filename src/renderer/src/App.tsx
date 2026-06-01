@@ -311,11 +311,11 @@ export default function App() {
               />
             )}
             
-            {/* Markdown reading frame */}
             <Reader
               markdown={markdown}
               filePath={filePath}
               zoom={zoom}
+              isDark={isDarkActive}
             />
           </>
         ) : (

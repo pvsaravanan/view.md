@@ -15,13 +15,17 @@ mermaid.initialize({
   theme: 'default',
 });
 
-const MermaidRenderer = ({ chart }: { chart: string }) => {
+const MermaidRenderer = ({ chart, isDark }: { chart: string, isDark: boolean }) => {
   const [svg, setSvg] = React.useState<string>('');
 
   React.useEffect(() => {
     let isMounted = true;
     const renderChart = async () => {
       try {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: isDark ? 'dark' : 'default',
+        });
         const id = `mermaid-${Math.random().toString(36).substring(2, 9)}`;
         const { svg: svgCode } = await mermaid.render(id, chart);
         if (isMounted) setSvg(svgCode);
@@ -32,7 +36,7 @@ const MermaidRenderer = ({ chart }: { chart: string }) => {
     };
     renderChart();
     return () => { isMounted = false; };
-  }, [chart]);
+  }, [chart, isDark]);
 
   return <div dangerouslySetInnerHTML={{ __html: svg }} />;
 };
@@ -58,6 +62,7 @@ interface ReaderProps {
   markdown: string;
   filePath: string | null;
   zoom: number;
+  isDark: boolean;
 }
 
 // Robust slugify helper to match outline anchors
@@ -109,7 +114,7 @@ export const resolveImagePath = (src: string, filePath: string | null): string =
   }
 };
 
-export const Reader: React.FC<ReaderProps> = ({ markdown, filePath, zoom }) => {
+export const Reader: React.FC<ReaderProps> = ({ markdown, filePath, zoom, isDark }) => {
   
   // Re-run Prism highlighter triggers on content updates
   useEffect(() => {
@@ -160,7 +165,7 @@ export const Reader: React.FC<ReaderProps> = ({ markdown, filePath, zoom }) => {
               </span>
             </div>
             <div className="p-6 flex justify-center bg-white dark:bg-zk-black overflow-x-auto">
-               <MermaidRenderer chart={codeContent} />
+               <MermaidRenderer chart={codeContent} isDark={isDark} />
             </div>
           </div>
         );
@@ -346,7 +351,7 @@ export const Reader: React.FC<ReaderProps> = ({ markdown, filePath, zoom }) => {
       h5: createHeading(5),
       h6: createHeading(6),
     };
-  }, [filePath]);
+  }, [filePath, isDark]);
 
   // Parse Frontmatter manually to avoid build issues with gray-matter in some Vite setups
   let displayMarkdown = markdown;
