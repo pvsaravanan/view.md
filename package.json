@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Sleek, instant, and lightweight desktop Markdown reader.",
   "main": "dist/main/main.js",
+  "repository": "https://github.com/pvsaravanan/view.md",
   "author": "Saravanan P V",
   "license": "MIT",
   "scripts": {
@@ -44,7 +45,7 @@
   "build": {
     "appId": "com.viewmd.app",
     "productName": "view.md",
-    "publish": null,
+    "publish": ["github"],
     "directories": {
       "output": "out"
     },
