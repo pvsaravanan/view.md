@@ -48,8 +48,10 @@
     "directories": {
       "output": "out"
     },
+    "icon": "assets/logo.png",
     "files": [
       "dist/**/*",
+      "assets/**/*",
       "package.json"
     ],
     "win": {

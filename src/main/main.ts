@@ -83,6 +83,7 @@ function createWindow() {
     minHeight: 500,
     frame: false, // Frameless window for premium design
     show: false, // Hide until ready to avoid flashing
+    icon: path.join(__dirname, '../../assets/logo.png'),
     backgroundColor: '#070a13', // slate-950 background matches theme
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
