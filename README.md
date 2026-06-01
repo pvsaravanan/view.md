@@ -10,20 +10,24 @@
 
 ## Features
 
-- **Instant Startup:** Tailored for a lightning-fast experience with load times under 500ms.
-- **Premium UI:** A modern, glassmorphic design that seamlessly integrates with your operating system's light/dark modes.
-- **Interactive Search:** Custom, keyboard-friendly `Ctrl+F` in-document search with real-time highlighting.
-- **Dynamic Table of Contents:** Resizable, auto-highlighting sidebar that tracks your reading progress.
-- **Secure Local Media:** Renders relative local images instantly and securely via a custom `view-media://` protocol.
-- **Single-Instance Locking:** Double-click multiple files smoothly—they all open dynamically in your single active reader without cluttering your desktop.
+| Feature | Description |
+| :--- | :--- |
+| **Instant Startup** | Tailored for a lightning-fast experience with load times under 500ms. |
+| **Premium UI** | A modern, glassmorphic design that seamlessly integrates with your operating system's light/dark modes. |
+| **Interactive Search** | Custom, keyboard-friendly `Ctrl+F` in-document search with real-time highlighting. |
+| **Dynamic Table of Contents** | Resizable, auto-highlighting sidebar that tracks your reading progress. |
+| **Secure Local Media** | Renders relative local images instantly and securely via a custom `view-media://` protocol. |
+| **Single-Instance Locking** | Double-click multiple files smoothly—they all open dynamically in your single active reader without cluttering your desktop. |
 
 ## Tech Stack
 
-- **Framework:** [Electron](https://www.electronjs.org/) (Main process) + [React 18](https://react.dev/) (Renderer)
-- **Language:** TypeScript
-- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
-- **Markdown Engine:** `react-markdown` + `remark-gfm` + `rehype-katex`
-- **Syntax Highlighting:** Pre-styled `PrismJS` for ultra-low latency initialization.
+| Layer | Technology |
+| :--- | :--- |
+| **Framework** | [Electron](https://www.electronjs.org/) (Main process) + [React 18](https://react.dev/) (Renderer) |
+| **Language** | TypeScript |
+| **Styling** | [Tailwind CSS v4](https://tailwindcss.com/) |
+| **Markdown Engine** | `react-markdown`, `remark-gfm`, `rehype-katex` |
+| **Syntax Highlighting**| Pre-styled `PrismJS` for ultra-low latency initialization. |
 
 ---
 
@@ -33,6 +37,14 @@
 
 - Node.js (v18 or higher)
 - npm or yarn
+
+### Quick Start Commands
+
+| Command | Action |
+| :--- | :--- |
+| `npm install` | Installs all required dependencies |
+| `npm run dev` | Concurrently compiles the React renderer and launches the Electron app with Hot-Module Replacement |
+| `npm run package` | Packages the application into a standalone Windows executable inside the `dist/` directory |
 
 ### Installation
 
@@ -44,34 +56,17 @@ cd view.md
 npm install
 ```
 
-### Development
-
-To start the app in development mode with Hot-Module Replacement (HMR):
-
-```bash
-npm run dev
-```
-
-This will concurrently compile the React renderer and launch the Electron application.
-
-### Building for Production
-
-To package the application into a standalone Windows executable:
-
-```bash
-npm run package
-```
-*The output installer and portable `.exe` will be located in the `dist/` directory.*
-
 ---
 
 ## Architecture Overview
 
-The application follows secure Electron best practices:
+The application follows secure Electron best practices, structured into three primary domains:
 
-1. **Main Process (`src/main/main.ts`)**: Manages the OS lifecycle, single-instance locks, theme detection, and custom protocol (`view-media://`) handling.
-2. **Preload Script (`src/main/preload.ts`)**: Serves as a secure bridge, exposing only necessary APIs (like file reading and theme detection) via `contextBridge` with `contextIsolation` enabled.
-3. **Renderer Process (`src/renderer/`)**: The React frontend containing the UI components (`Reader`, `Sidebar`, `Search`, `Toolbar`) styled with Tailwind CSS.
+| Component | Path | Responsibility |
+| :--- | :--- | :--- |
+| **Main Process** | `src/main/main.ts` | Manages OS lifecycle, single-instance locks, theme detection, and custom protocol (`view-media://`) handling. |
+| **Preload Script** | `src/main/preload.ts` | Serves as a secure bridge, exposing only necessary APIs via `contextBridge` with `contextIsolation` enabled. |
+| **Renderer Process** | `src/renderer/` | The React frontend containing the UI components (`Reader`, `Sidebar`, `Search`, `Toolbar`). |
 
 > *For deeper structural knowledge and the full product requirements, see [`prd.md`](./prd.md).*
 
