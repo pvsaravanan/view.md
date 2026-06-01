@@ -1,0 +1,298 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --rig-bg-paper: #EBEBEB;
+    --rig-text-ink: #3D3D3D;
+    --rig-bg-dark: #000000;
+    --rig-text-light: #FFFFFF;
+    --rig-accent-primary: #C5FF4A;
+    --rig-accent-secondary: #FFA94A;
+    --rig-border: rgba(10, 10, 10, 0.2);
+    --rig-border-dark: rgba(255, 255, 255, 0.15);
+    
+    --rig-space-1: 4px;
+    --rig-space-2: 8px;
+    --rig-space-3: 12px;
+    --rig-space-4: 16px;
+    --rig-space-6: 24px;
+    --rig-space-8: 32px;
+    --rig-space-12: 48px;
+    --rig-space-16: 64px;
+    
+    --rig-radius-sm: 4px;
+    --rig-radius-md: 6px;
+    --rig-radius-lg: 10px;
+    --rig-radius-xl: 16px;
+  }
+  
+  .dark {
+    --rig-bg-paper: #000000;
+    --rig-text-ink: #FFFFFF;
+    --rig-bg-dark: #FFFFFF;
+    --rig-text-light: #3D3D3D;
+    --rig-border: rgba(255, 255, 255, 0.15);
+  }
+
+  body {
+    @apply text-slate-800 dark:text-slate-200 antialiased selection:bg-zk-neon/40;
+    background-color: var(--rig-bg-paper);
+    color: var(--rig-text-ink);
+  }
+}
+
+/* Frameless Window Header Dragging */
+.titlebar-drag {
+  -webkit-app-region: drag;
+}
+
+.titlebar-nodrag {
+  -webkit-app-region: no-drag;
+}
+
+/* Custom Highlight API Styling */
+::highlight(search-match) {
+  background-color: #C5FF4A66; /* zk-neon at 40% opacity */
+  color: inherit;
+}
+
+::highlight(search-active) {
+  background-color: #C5FF4A; /* zk-neon */
+  color: #000000;
+}
+
+/* Premium Typography for Markdown (zkPass-inspired) */
+.markdown-prose {
+  line-height: 1.625;
+  @apply font-mono;
+}
+
+.markdown-prose h1 {
+  @apply text-5xl font-bold font-mono border-b border-[var(--rig-border)] dark:border-[var(--rig-border-dark)] pb-4 mt-12 mb-8 text-[var(--rig-text-ink)] tracking-tight leading-tight;
+}
+
+.markdown-prose h2 {
+  @apply text-4xl font-bold font-mono border-b border-[var(--rig-border)] dark:border-[var(--rig-border-dark)] pb-3 mt-10 mb-6 text-[var(--rig-text-ink)] tracking-tight leading-tight;
+}
+
+.markdown-prose h3 {
+  @apply text-2xl font-bold font-mono mt-8 mb-4 text-[var(--rig-text-ink)] tracking-tight leading-snug;
+}
+
+.markdown-prose h4 {
+  @apply text-xl font-bold font-mono mt-6 mb-3 text-[var(--rig-text-ink)] tracking-tight leading-snug;
+}
+
+.markdown-prose p {
+  @apply mt-0 mb-6 leading-relaxed text-zk-charcoal dark:text-zk-graylight;
+}
+
+.markdown-prose a {
+  @apply text-black dark:text-white font-semibold hover:underline transition-all;
+}
+
+.markdown-prose blockquote {
+  @apply border-l-4 border-zk-neon pl-4 py-2 my-6 text-zk-graydark dark:text-zk-graystd italic bg-zk-offwhite dark:bg-zk-charcoal/40 rounded-none;
+}
+
+.markdown-prose ul {
+  @apply list-disc pl-6 mb-6 space-y-2 text-zk-charcoal dark:text-zk-graylight;
+}
+
+.markdown-prose ol {
+  @apply list-decimal pl-6 mb-6 space-y-2 text-zk-charcoal dark:text-zk-graylight;
+}
+
+.markdown-prose li > p {
+  @apply m-0 inline;
+}
+
+.markdown-prose hr {
+  @apply border-0 border-t border-zk-graymed dark:border-zk-charcoal my-10;
+}
+
+/* GFM Markdown Tables */
+.markdown-prose table {
+  @apply w-full border-collapse mb-8 text-sm text-left overflow-hidden rounded-none border border-zk-graymed dark:border-zk-charcoal;
+}
+
+.markdown-prose th {
+  @apply bg-zk-offwhite dark:bg-zk-charcoal font-semibold px-4 py-3 border-b border-zk-graymed dark:border-zk-charcoal text-zk-charcoal dark:text-zk-white;
+}
+
+.markdown-prose td {
+  @apply px-4 py-3 border-b border-zk-graylight dark:border-zk-charcoal/50 text-zk-charcoal dark:text-zk-graylight;
+}
+
+.markdown-prose tr:last-child td {
+  @apply border-b-0;
+}
+
+.markdown-prose tr:nth-child(even) td {
+  @apply bg-zk-offwhite/50 dark:bg-zk-charcoal/20;
+}
+
+/* Strikethrough */
+.markdown-prose del {
+  @apply text-zk-graydark dark:text-zk-graystd line-through;
+}
+
+/* Inline Code tags */
+.markdown-prose :not(pre) > code {
+  @apply bg-black/5 dark:bg-white/10 text-[var(--rig-text-ink)] font-mono text-[0.875em] px-1.5 py-0.5 rounded-md font-medium border border-[var(--rig-border)] dark:border-[var(--rig-border-dark)];
+}
+
+
+.markdown-prose pre code {
+  @apply block overflow-x-auto p-6 font-mono text-sm leading-relaxed text-zk-charcoal dark:text-zk-graylight bg-transparent;
+}
+
+/* Checklists GFM */
+.markdown-prose .task-list-item {
+  @apply flex items-start gap-3 list-none -ml-6 mb-3;
+}
+
+.markdown-prose .task-list-item input[type="checkbox"] {
+  @apply mt-1 rounded-none border-zk-graymed dark:border-zk-charcoal text-zk-neon focus:ring-zk-neon/20 dark:bg-zk-black dark:checked:bg-zk-neon pointer-events-none;
+}
+
+/* Images */
+.markdown-prose img {
+  @apply max-w-full h-auto rounded-none shadow-flat border border-zk-graymed dark:border-zk-charcoal my-8 mx-auto transition-transform hover:scale-[1.01];
+}
+
+/* --- Prism Custom Highlighting Colors --- */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  @apply text-zk-graydark dark:text-zk-graystd italic;
+}
+
+.token.punctuation {
+  @apply text-zk-graystd dark:text-zk-graydark;
+}
+
+.token.namespace {
+  @apply opacity-70;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  @apply text-zk-charcoal dark:text-zk-white font-semibold;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  @apply text-zk-neon;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  @apply text-zk-charcoal dark:text-zk-graylight;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  @apply text-zk-neon font-semibold;
+}
+
+.token.function,
+.token.class-name {
+  @apply text-zk-charcoal dark:text-zk-white font-semibold;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  @apply text-zk-graydark dark:text-zk-graystd;
+}
+
+span.token[class~="important"],
+span.token[class~="bold"] {
+  font-weight: bold;
+}
+span.token[class~="italic"] {
+  font-style: italic;
+}
+
+.token.entity {
+  @apply cursor-help;
+}
+
+/* Custom Highlight API for Search Matches */
+::highlight(search-match) {
+  background-color: theme('colors.zk.neon');
+  color: theme('colors.zk.black');
+}
+
+/* --- Print Styles for PDF Export --- */
+@media print {
+  /* Hide UI elements */
+  .titlebar-drag, 
+  .titlebar-nodrag,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Reset body colors */
+  body, .markdown-prose {
+    background-color: white !important;
+    color: black !important;
+  }
+
+  /* Force background colors to print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Expand reading view and allow full scroll capture */
+  html, body, #root {
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  /* Target the flex containers that cause clipping */
+  .flex-1, .overflow-hidden, .overflow-y-auto {
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  .markdown-prose {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Prevent page breaks inside important elements */
+  img, pre, blockquote, table, .task-list-item {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+}
