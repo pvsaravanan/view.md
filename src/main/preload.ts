@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // File dialog & Reading
   openFile: () => ipcRenderer.invoke('open-file-dialog'),
   readFile: (filePath: string) => ipcRenderer.invoke('read-file', filePath),
+  saveFile: (filePath: string | null, content: string) => ipcRenderer.invoke('save-file', filePath, content),
   
   // Shell integration
   openExternal: (url: string) => ipcRenderer.invoke('open-external-url', url),

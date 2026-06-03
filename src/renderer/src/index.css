@@ -29,11 +29,11 @@
   }
   
   .dark {
-    --rig-bg-paper: #000000;
-    --rig-text-ink: #FFFFFF;
-    --rig-bg-dark: #FFFFFF;
-    --rig-text-light: #3D3D3D;
-    --rig-border: rgba(255, 255, 255, 0.15);
+    --rig-bg-paper: #18181A;
+    --rig-text-ink: #E4E4E5;
+    --rig-bg-dark: #27272A;
+    --rig-text-light: #F4F4F5;
+    --rig-border: rgba(255, 255, 255, 0.1);
   }
 
   body {

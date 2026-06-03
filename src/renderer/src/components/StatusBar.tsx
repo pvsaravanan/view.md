@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles } from 'lucide-react';
+import { FileText } from 'lucide-react';
 
 interface StatusBarProps {
   filePath: string | null;
@@ -29,7 +29,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({ filePath, markdown, zoom }
       
       {/* File Path indicator */}
       <div className="truncate max-w-[50%] flex items-center gap-1.5" title={filePath || 'No active file'}>
-        <Sparkles size={12} className="text-zk-neon shrink-0" />
+        <FileText size={12} className="text-zk-neon shrink-0" />
         <span className="truncate">
           {filePath ? filePath : 'Ready to read Markdown documents'}
         </span>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FolderOpen, ZoomIn, ZoomOut, RotateCcw, Sun, Moon, Search, Minus, Square, X, PanelLeft, Download, FileCode2 } from 'lucide-react';
+import { FolderOpen, ZoomIn, ZoomOut, RotateCcw, Sun, Moon, Search, Minus, Square, X, PanelLeft, Download, FileCode2, FilePlus, Save } from 'lucide-react';
 
 interface ToolbarProps {
   filePath: string | null;
@@ -9,7 +9,9 @@ interface ToolbarProps {
   sidebarOpen: boolean;
   sidebarWidth?: number;
   searchOpen: boolean;
+  onNewFile: () => void;
   onOpenFile: () => void;
+  onSaveFile: () => void;
   onToggleTheme: () => void;
   onZoomIn: () => void;
   onZoomOut: () => void;
@@ -25,7 +27,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   sidebarOpen,
   sidebarWidth,
   searchOpen,
+  onNewFile,
   onOpenFile,
+  onSaveFile,
   onToggleTheme,
   onZoomIn,
   onZoomOut,
@@ -103,12 +107,30 @@ export const Toolbar: React.FC<ToolbarProps> = ({
       <div className="titlebar-nodrag flex items-center gap-2 ml-2">
         
         <button
+          onClick={onNewFile}
+          title="New File (Ctrl+N)"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm border border-transparent text-xs font-semibold text-[var(--rig-text-ink)] hover:bg-white dark:hover:bg-zk-black transition-all active:scale-[0.97]"
+        >
+          <FilePlus size={16} />
+          <span>New</span>
+        </button>
+
+        <button
           onClick={onOpenFile}
           title="Open File (Ctrl+O)"
-          className="flex items-center gap-2 px-3 py-1.5 rounded-sm border border-transparent text-xs font-semibold text-[var(--rig-text-ink)] hover:bg-white dark:hover:bg-zk-black transition-all active:scale-[0.97]"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm border border-transparent text-xs font-semibold text-[var(--rig-text-ink)] hover:bg-white dark:hover:bg-zk-black transition-all active:scale-[0.97]"
         >
           <FolderOpen size={16} />
           <span>Open</span>
+        </button>
+
+        <button
+          onClick={onSaveFile}
+          title="Save File (Ctrl+S)"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm border border-transparent text-xs font-semibold text-[var(--rig-text-ink)] hover:bg-white dark:hover:bg-zk-black transition-all active:scale-[0.97]"
+        >
+          <Save size={16} />
+          <span>Save</span>
         </button>
 
         {/* Vertical Divider */}

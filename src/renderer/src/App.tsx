@@ -4,8 +4,9 @@ import { Sidebar, HeadingItem } from './components/Sidebar';
 import { Reader, slugify } from './components/Reader';
 import { Search } from './components/Search';
 import { StatusBar } from './components/StatusBar';
-import { FileText, ArrowRight, FolderOpen, Search as SearchIcon, ZoomIn, Sun, Moon } from 'lucide-react';
-import appLogo from './assets/logo.png';
+import { FileText, ArrowRight, FolderOpen, Search as SearchIcon, ZoomIn, Sun, Moon, X } from 'lucide-react';
+import logoDark from './assets/view.md.png';
+import logoLight from './assets/view.md-light.png';
 
 export default function App() {
   // Global States
@@ -20,6 +21,7 @@ export default function App() {
   const [headings, setHeadings] = useState<HeadingItem[]>([]);
   const [activeSlug, setActiveSlug] = useState<string>('');
   const [isDraggingOver, setIsDraggingOver] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   // Sync with OS Theme
   useEffect(() => {
@@ -109,11 +111,38 @@ export default function App() {
   useEffect(() => {
     const unsubscribeFile = window.electronAPI.onFileOpened((path) => {
       loadFile(path);
+      setIsEditing(true); // Always open in split view for editing
     });
     return () => {
       unsubscribeFile();
     };
   }, [loadFile]);
+
+  // Handle New File creation
+  const handleNewFile = () => {
+    setFilePath(null);
+    setMarkdown('');
+    setHeadings([]);
+    setActiveSlug('');
+    setSearchOpen(false);
+    setIsEditing(true);
+  };
+
+  // Handle Save File
+  const handleSaveFile = async () => {
+    if (!isEditing && !filePath && !markdown) return;
+    
+    try {
+      const result = await (window as any).electronAPI.saveFile(filePath, markdown);
+      if (result && result.success && result.filePath) {
+        setFilePath(result.filePath);
+      } else if (result && result.error) {
+        alert(`Error saving file:\n${result.error}`);
+      }
+    } catch (e) {
+      console.error('Error in handleSaveFile:', e);
+    }
+  };
 
   // Dynamic Scroll Spy Section Highlighter
   const isAutoScrolling = React.useRef(false);
@@ -181,6 +210,7 @@ export default function App() {
     const path = await window.electronAPI.openFile();
     if (path) {
       loadFile(path);
+      setIsEditing(true); // Automatically show editor for opened files
     }
   };
 
@@ -203,6 +233,16 @@ export default function App() {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'o') {
         e.preventDefault();
         handleOpenFile();
+      }
+      // New: Ctrl+N
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+        e.preventDefault();
+        handleNewFile();
+      }
+      // Save: Ctrl+S
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        handleSaveFile();
       }
       // 2. Zoom In: Ctrl+Plus / Ctrl+=
       if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '+')) {
@@ -283,7 +323,9 @@ export default function App() {
         sidebarOpen={sidebarOpen}
         sidebarWidth={sidebarWidth}
         searchOpen={searchOpen}
+        onNewFile={handleNewFile}
         onOpenFile={handleOpenFile}
+        onSaveFile={handleSaveFile}
         onToggleTheme={toggleTheme}
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
@@ -298,7 +340,7 @@ export default function App() {
       {/* Primary Workspace Splitter Container */}
       <div className="flex-1 flex overflow-hidden relative">
         
-        {filePath ? (
+        {filePath || isEditing ? (
           <>
             {/* Reading outline sidebar */}
             {sidebarOpen && (
@@ -309,6 +351,28 @@ export default function App() {
                 width={sidebarWidth}
                 onWidthChange={setSidebarWidth}
               />
+            )}
+            
+            {/* Editor Pane (Left Split) */}
+            {isEditing && (
+              <div className="flex-1 border-r border-[var(--rig-border)] dark:border-[var(--rig-border-dark)] bg-[var(--rig-bg-paper)] flex flex-col shrink-0 min-w-0">
+                <div className="h-8 border-b border-[var(--rig-border)] dark:border-[var(--rig-border-dark)] bg-zk-graylight dark:bg-zk-charcoal flex items-center justify-between px-4 shrink-0">
+                  <span className="text-[10px] font-bold tracking-widest text-zk-charcoal dark:text-zk-graylight uppercase">Editor</span>
+                  <button onClick={() => setIsEditing(false)} className="text-zk-charcoal dark:text-zk-graylight opacity-50 hover:opacity-100 transition-opacity" title="Close Editor">
+                    <X size={14} />
+                  </button>
+                </div>
+                <textarea
+                  className="flex-1 p-6 md:p-8 font-mono text-sm leading-relaxed resize-none outline-none bg-transparent text-zk-charcoal dark:text-zk-graylight focus:ring-0"
+                  value={markdown}
+                  onChange={(e) => {
+                    setMarkdown(e.target.value);
+                    setHeadings(parseHeadings(e.target.value));
+                  }}
+                  placeholder="Enter Markdown code here..."
+                  spellCheck={false}
+                />
+              </div>
             )}
             
             <Reader
@@ -326,7 +390,7 @@ export default function App() {
               
               {/* App Emblem logo */}
               <img 
-                src={appLogo} 
+                src={isDarkActive ? logoLight : logoDark} 
                 alt="view.md logo" 
                 className="w-56 h-56 self-center object-contain transition-transform hover:scale-105 shrink-0" 
               />

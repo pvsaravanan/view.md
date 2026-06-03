@@ -83,7 +83,7 @@ function createWindow() {
     minHeight: 500,
     frame: false, // Frameless window for premium design
     show: false, // Hide until ready to avoid flashing
-    icon: path.join(__dirname, '../../assets/logo.png'),
+    icon: path.join(__dirname, '../../assets/view.md-light.png'),
     backgroundColor: '#070a13', // slate-950 background matches theme
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -206,6 +206,36 @@ ipcMain.handle('read-file', async (event, filePath: string) => {
       success: false,
       error: error.message
     };
+  }
+});
+
+ipcMain.handle('save-file', async (event, filePath: string | null, content: string) => {
+  const window = BrowserWindow.fromWebContents(event.sender);
+  if (!window) return { success: false, error: 'No window' };
+
+  let targetPath = filePath;
+  if (!targetPath) {
+    const result = await dialog.showSaveDialog(window, {
+      title: 'Save Markdown File',
+      defaultPath: 'untitled.md',
+      filters: [
+        { name: 'Markdown Files', extensions: ['md', 'markdown'] },
+        { name: 'All Files', extensions: ['*'] }
+      ]
+    });
+    
+    if (result.canceled || !result.filePath) {
+      return { success: false, canceled: true };
+    }
+    targetPath = result.filePath;
+  }
+
+  try {
+    await fs.promises.writeFile(targetPath, content, 'utf-8');
+    return { success: true, filePath: targetPath };
+  } catch (error: any) {
+    console.error('Failed to save file', error);
+    return { success: false, error: error.message };
   }
 });
 
