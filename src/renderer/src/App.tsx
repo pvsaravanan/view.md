@@ -4,16 +4,13 @@ import { Sidebar, HeadingItem } from './components/Sidebar';
 import { Reader, slugify } from './components/Reader';
 import { Search } from './components/Search';
 import { StatusBar } from './components/StatusBar';
-import { FileText, ArrowRight, FolderOpen, Search as SearchIcon, ZoomIn, Sun, Moon, X } from 'lucide-react';
+import { FileText, ArrowRight, FolderOpen } from 'lucide-react';
 import logoDark from './assets/view.md.png';
-import logoLight from './assets/view.md-light.png';
 
 export default function App() {
   // Global States
   const [filePath, setFilePath] = useState<string | null>(null);
   const [markdown, setMarkdown] = useState<string>('');
-  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
-  const [isDarkActive, setIsDarkActive] = useState<boolean>(true);
   const [zoom, setZoom] = useState<number>(100);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
@@ -21,41 +18,13 @@ export default function App() {
   const [headings, setHeadings] = useState<HeadingItem[]>([]);
   const [activeSlug, setActiveSlug] = useState<string>('');
   const [isDraggingOver, setIsDraggingOver] = useState<boolean>(false);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  // Sync with OS Theme
-  useEffect(() => {
-    const initTheme = async () => {
-      if (theme === 'system') {
-        const isDark = await window.electronAPI.getSystemTheme();
-        setIsDarkActive(isDark);
-      }
-    };
-    initTheme();
-
-    // Hook listeners
-    const unsubscribeTheme = window.electronAPI.onThemeChanged((isDark) => {
-      if (theme === 'system') {
-        setIsDarkActive(isDark);
-      }
-    });
-
-    return () => {
-      unsubscribeTheme();
-    };
-  }, [theme]);
-
-  // Apply theme class to HTML element
+  // Apply light theme permanently to HTML element
   useEffect(() => {
     const root = document.documentElement;
-    if (isDarkActive) {
-      root.classList.add('dark');
-      root.style.colorScheme = 'dark';
-    } else {
-      root.classList.remove('dark');
-      root.style.colorScheme = 'light';
-    }
-  }, [isDarkActive]);
+    root.classList.remove('dark');
+    root.style.colorScheme = 'light';
+  }, []);
 
   // Document Heading Outline Parser
   const parseHeadings = useCallback((md: string): HeadingItem[] => {
@@ -111,38 +80,13 @@ export default function App() {
   useEffect(() => {
     const unsubscribeFile = window.electronAPI.onFileOpened((path) => {
       loadFile(path);
-      setIsEditing(true); // Always open in split view for editing
     });
     return () => {
       unsubscribeFile();
     };
   }, [loadFile]);
 
-  // Handle New File creation
-  const handleNewFile = () => {
-    setFilePath(null);
-    setMarkdown('');
-    setHeadings([]);
-    setActiveSlug('');
-    setSearchOpen(false);
-    setIsEditing(true);
-  };
 
-  // Handle Save File
-  const handleSaveFile = async () => {
-    if (!isEditing && !filePath && !markdown) return;
-    
-    try {
-      const result = await (window as any).electronAPI.saveFile(filePath, markdown);
-      if (result && result.success && result.filePath) {
-        setFilePath(result.filePath);
-      } else if (result && result.error) {
-        alert(`Error saving file:\n${result.error}`);
-      }
-    } catch (e) {
-      console.error('Error in handleSaveFile:', e);
-    }
-  };
 
   // Dynamic Scroll Spy Section Highlighter
   const isAutoScrolling = React.useRef(false);
@@ -192,10 +136,19 @@ export default function App() {
   // Click handler to scroll canvas to TOC headers
   const handleTocItemClick = (slug: string) => {
     const targetEl = document.getElementById(slug);
-    if (targetEl) {
+    const readerCanvas = document.querySelector('.markdown-prose')?.parentElement;
+    if (targetEl && readerCanvas) {
       isAutoScrolling.current = true;
       setActiveSlug(slug);
-      targetEl.scrollIntoView({ behavior: 'smooth' });
+      
+      const rect = targetEl.getBoundingClientRect();
+      const canvasRect = readerCanvas.getBoundingClientRect();
+      const targetTop = rect.top - canvasRect.top + readerCanvas.scrollTop - 24; // 24px top padding offset
+      
+      readerCanvas.scrollTo({
+        top: targetTop,
+        behavior: 'smooth'
+      });
       
       // Clear auto-scrolling flag after smooth scroll finishes (~800ms)
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
@@ -210,7 +163,6 @@ export default function App() {
     const path = await window.electronAPI.openFile();
     if (path) {
       loadFile(path);
-      setIsEditing(true); // Automatically show editor for opened files
     }
   };
 
@@ -219,12 +171,7 @@ export default function App() {
   const zoomOut = () => setZoom(z => Math.max(50, z - 10));
   const resetZoom = () => setZoom(100);
 
-  // Cycle Theme selection
-  const toggleTheme = () => {
-    const nextIsDark = !isDarkActive;
-    setTheme(nextIsDark ? 'dark' : 'light');
-    setIsDarkActive(nextIsDark);
-  };
+
 
   // Keyboard Hotkeys listener hook
   useEffect(() => {
@@ -234,16 +181,7 @@ export default function App() {
         e.preventDefault();
         handleOpenFile();
       }
-      // New: Ctrl+N
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
-        e.preventDefault();
-        handleNewFile();
-      }
-      // Save: Ctrl+S
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-        e.preventDefault();
-        handleSaveFile();
-      }
+
       // 2. Zoom In: Ctrl+Plus / Ctrl+=
       if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '+')) {
         e.preventDefault();
@@ -317,16 +255,11 @@ export default function App() {
       {/* Toolbar */}
       <Toolbar
         filePath={filePath}
-        theme={theme}
-        isDarkActive={isDarkActive}
         zoom={zoom}
         sidebarOpen={sidebarOpen}
         sidebarWidth={sidebarWidth}
         searchOpen={searchOpen}
-        onNewFile={handleNewFile}
         onOpenFile={handleOpenFile}
-        onSaveFile={handleSaveFile}
-        onToggleTheme={toggleTheme}
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
         onResetZoom={resetZoom}
@@ -340,7 +273,7 @@ export default function App() {
       {/* Primary Workspace Splitter Container */}
       <div className="flex-1 flex overflow-hidden relative">
         
-        {filePath || isEditing ? (
+        {filePath ? (
           <>
             {/* Reading outline sidebar */}
             {sidebarOpen && (
@@ -353,33 +286,10 @@ export default function App() {
               />
             )}
             
-            {/* Editor Pane (Left Split) */}
-            {isEditing && (
-              <div className="flex-1 border-r border-[var(--rig-border)] dark:border-[var(--rig-border-dark)] bg-[var(--rig-bg-paper)] flex flex-col shrink-0 min-w-0">
-                <div className="h-8 border-b border-[var(--rig-border)] dark:border-[var(--rig-border-dark)] bg-zk-graylight dark:bg-zk-charcoal flex items-center justify-between px-4 shrink-0">
-                  <span className="text-[10px] font-bold tracking-widest text-zk-charcoal dark:text-zk-graylight uppercase">Editor</span>
-                  <button onClick={() => setIsEditing(false)} className="text-zk-charcoal dark:text-zk-graylight opacity-50 hover:opacity-100 transition-opacity" title="Close Editor">
-                    <X size={14} />
-                  </button>
-                </div>
-                <textarea
-                  className="flex-1 p-6 md:p-8 font-mono text-sm leading-relaxed resize-none outline-none bg-transparent text-zk-charcoal dark:text-zk-graylight focus:ring-0"
-                  value={markdown}
-                  onChange={(e) => {
-                    setMarkdown(e.target.value);
-                    setHeadings(parseHeadings(e.target.value));
-                  }}
-                  placeholder="Enter Markdown code here..."
-                  spellCheck={false}
-                />
-              </div>
-            )}
-            
             <Reader
               markdown={markdown}
               filePath={filePath}
               zoom={zoom}
-              isDark={isDarkActive}
             />
           </>
         ) : (
@@ -390,7 +300,7 @@ export default function App() {
               
               {/* App Emblem logo */}
               <img 
-                src={isDarkActive ? logoLight : logoDark} 
+                src={logoDark} 
                 alt="view.md logo" 
                 className="w-56 h-56 self-center object-contain transition-transform hover:scale-105 shrink-0" 
               />

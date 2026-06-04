@@ -7,7 +7,7 @@ import remarkEmoji from 'remark-emoji';
 import 'katex/dist/katex.min.css';
 import 'prismjs';
 const Prism = (window as any).Prism;
-import { Copy, Check, FileText, Info, Lightbulb, AlertTriangle, AlertOctagon } from 'lucide-react';
+import { Copy, Check, FileText, Info, Lightbulb, AlertTriangle, AlertOctagon, Database } from 'lucide-react';
 import mermaid from 'mermaid';
 
 mermaid.initialize({
@@ -62,7 +62,6 @@ interface ReaderProps {
   markdown: string;
   filePath: string | null;
   zoom: number;
-  isDark: boolean;
 }
 
 // Robust slugify helper to match outline anchors
@@ -114,7 +113,7 @@ export const resolveImagePath = (src: string, filePath: string | null): string =
   }
 };
 
-export const Reader: React.FC<ReaderProps> = ({ markdown, filePath, zoom, isDark }) => {
+export const Reader = React.memo<ReaderProps>(({ markdown, filePath, zoom }) => {
   
   // Re-run Prism highlighter triggers on content updates
   useEffect(() => {
@@ -165,7 +164,7 @@ export const Reader: React.FC<ReaderProps> = ({ markdown, filePath, zoom, isDark
               </span>
             </div>
             <div className="p-6 flex justify-center bg-white dark:bg-zk-black overflow-x-auto">
-               <MermaidRenderer chart={codeContent} isDark={isDark} />
+               <MermaidRenderer chart={codeContent} isDark={false} />
             </div>
           </div>
         );
@@ -202,8 +201,16 @@ export const Reader: React.FC<ReaderProps> = ({ markdown, filePath, zoom, isDark
           e.preventDefault();
           const slug = href.substring(1);
           const element = document.getElementById(slug);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+          const readerCanvas = document.querySelector('.markdown-prose')?.parentElement;
+          if (element && readerCanvas) {
+            const rect = element.getBoundingClientRect();
+            const canvasRect = readerCanvas.getBoundingClientRect();
+            const targetTop = rect.top - canvasRect.top + readerCanvas.scrollTop - 24; // 24px top padding offset
+            
+            readerCanvas.scrollTo({
+              top: targetTop,
+              behavior: 'smooth'
+            });
           }
         } else {
           e.preventDefault();
@@ -351,7 +358,7 @@ export const Reader: React.FC<ReaderProps> = ({ markdown, filePath, zoom, isDark
       h5: createHeading(5),
       h6: createHeading(6),
     };
-  }, [filePath, isDark]);
+  }, [filePath]);
 
   // Parse Frontmatter manually to avoid build issues with gray-matter in some Vite setups
   let displayMarkdown = markdown;
@@ -374,7 +381,7 @@ export const Reader: React.FC<ReaderProps> = ({ markdown, filePath, zoom, isDark
 
   return (
     <div 
-      className="flex-1 overflow-y-auto px-8 sm:px-12 md:px-20 py-8 scroll-smooth bg-zk-white dark:bg-zk-black"
+      className="flex-1 overflow-y-auto px-8 sm:px-12 md:px-20 py-8 scroll-smooth bg-[var(--rig-bg-paper)]"
       style={{ fontSize: `${(zoom / 100) * 16}px` }}
     >
       <div className="w-full max-w-[1200px] mx-auto markdown-prose text-zk-charcoal dark:text-zk-graylight leading-relaxed font-sans pb-32">
@@ -413,4 +420,4 @@ export const Reader: React.FC<ReaderProps> = ({ markdown, filePath, zoom, isDark
       </div>
     </div>
   );
-};
+});
