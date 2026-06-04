@@ -19,7 +19,7 @@
 | Feature | Description |
 | :--- | :--- |
 | **Instant Startup** | Tailored for a lightning-fast experience with load times under 500ms. |
-| **Premium UI** | A modern, glassmorphic design that seamlessly integrates with your operating system's light/dark modes. |
+| **Premium UI** | A clean, light-themed, editorial-style layout using premium Claude-style typography (serif headings and high-legibility sans-serif body text). |
 | **Interactive Search** | Custom, keyboard-friendly `Ctrl+F` in-document search with real-time highlighting. |
 | **Dynamic Table of Contents** | Resizable, auto-highlighting sidebar that tracks your reading progress. |
 | **Secure Local Media** | Renders relative local images instantly and securely via a custom `view-media://` protocol. |
@@ -70,7 +70,7 @@ The application follows secure Electron best practices, structured into three pr
 
 | Component | Path | Responsibility |
 | :--- | :--- | :--- |
-| **Main Process** | `src/main/main.ts` | Manages OS lifecycle, single-instance locks, theme detection, and custom protocol (`view-media://`) handling. |
+| **Main Process** | `src/main/main.ts` | Manages OS lifecycle, single-instance locks, and custom protocol (`view-media://`) handling. |
 | **Preload Script** | `src/main/preload.ts` | Serves as a secure bridge, exposing only necessary APIs via `contextBridge` with `contextIsolation` enabled. |
 | **Renderer Process** | `src/renderer/` | The React frontend containing the UI components (`Reader`, `Sidebar`, `Search`, `Toolbar`). |
 
