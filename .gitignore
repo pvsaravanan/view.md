@@ -3,3 +3,10 @@ dist/
 out/
 graphify-out/
 .DS_Store
+
+# Tauri & Rust ignores
+src-tauri/target/
+dist_release/
+as_log.txt
+w64devkit/
+w64devkit.exe

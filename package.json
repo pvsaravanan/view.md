@@ -7,11 +7,16 @@
   "author": "Saravanan P V",
   "license": "MIT",
   "scripts": {
-    "dev": "node scripts/dev.js",
-    "build": "node scripts/build.js",
-    "package": "npm run build && electron-builder"
+    "dev:vite": "vite",
+    "build:vite": "vite build",
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "package": "tauri build"
   },
   "devDependencies": {
+    "@tauri-apps/api": "^2.11.0",
+    "@tauri-apps/cli": "^2.11.2",
     "@types/node": "^20.14.9",
     "@types/prismjs": "^1.26.4",
     "@types/react": "^18.3.3",
@@ -22,14 +27,11 @@
     "electron": "^31.0.1",
     "electron-builder": "^24.13.3",
     "esbuild": "^0.21.5",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.4",
-    "typescript": "^5.4.5",
-    "vite": "^5.3.1",
     "gray-matter": "^4.0.3",
     "katex": "^0.17.0",
     "lucide-react": "^0.435.0",
     "mermaid": "^11.15.0",
+    "postcss": "^8.4.38",
     "prismjs": "^1.29.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -38,7 +40,10 @@
     "remark-directive": "^4.0.0",
     "remark-emoji": "^5.0.2",
     "remark-gfm": "^4.0.0",
-    "remark-math": "^6.0.0"
+    "remark-math": "^6.0.0",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.4.5",
+    "vite": "^5.3.1"
   },
   "build": {
     "appId": "com.viewmd.app",

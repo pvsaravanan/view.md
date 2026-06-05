@@ -35,7 +35,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   const handleClose = () => window.electronAPI.close();
 
   return (
-    <header className="print:hidden titlebar-drag h-16 w-full flex items-center justify-between border-b border-[var(--rig-border)] dark:border-[var(--rig-border-dark)] bg-[var(--rig-bg-paper)] px-4 select-none z-30 shrink-0">
+    <header data-tauri-drag-region className="print:hidden titlebar-drag h-16 w-full flex items-center justify-between border-b border-[var(--rig-border)] dark:border-[var(--rig-border-dark)] bg-[var(--rig-bg-paper)] px-4 select-none z-30 shrink-0">
       
       {/* Left side: Toggle Sidebar & Open File */}
       <div 

@@ -1,0 +1,8 @@
+[build]
+target-dir = "C:\\Users\\saravanan\\AppData\\Local\\Temp\\view-md-target"
+
+[target.x86_64-pc-windows-gnu]
+linker = "rust-lld"
+
+[target.x86_64-pc-windows-msvc]
+linker = "rust-lld"

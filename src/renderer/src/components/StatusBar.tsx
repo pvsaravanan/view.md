@@ -29,7 +29,6 @@ export const StatusBar: React.FC<StatusBarProps> = ({ filePath, markdown, zoom }
       
       {/* File Path indicator */}
       <div className="truncate max-w-[50%] flex items-center gap-1.5" title={filePath || 'No active file'}>
-        <FileText size={12} className="text-zk-neon shrink-0" />
         <span className="truncate">
           {filePath ? filePath : 'Ready to read Markdown documents'}
         </span>

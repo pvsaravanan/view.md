@@ -5,7 +5,7 @@ import { Reader, slugify } from './components/Reader';
 import { Search } from './components/Search';
 import { StatusBar } from './components/StatusBar';
 import { FileText, ArrowRight, FolderOpen } from 'lucide-react';
-import logoDark from './assets/view.md.png';
+import logoDark from './assets/logo-ui.svg';
 
 export default function App() {
   // Global States
@@ -313,18 +313,18 @@ export default function App() {
               {/* Interactive File Load box */}
               <button 
                 onClick={handleOpenFile}
-                className="w-full flex items-center justify-between p-4 rounded-md border-[2px] border-[var(--rig-text-ink)] bg-white dark:bg-black shadow-offset-dark dark:shadow-offset-neon hover:translate-y-[2px] hover:shadow-offset-dark-active dark:hover:shadow-offset-neon-active transition-all group shrink-0"
+                className="w-full flex items-center justify-between p-4 rounded-lg border border-[var(--rig-border)] dark:border-[var(--rig-border-dark)] bg-white dark:bg-zk-black hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-all shadow-sm group shrink-0"
               >
                 <div className="flex items-center gap-4">
-                  <div className="p-2 rounded-sm bg-zk-graylight dark:bg-zk-charcoal text-[var(--rig-text-ink)]">
+                  <div className="p-2.5 rounded-md bg-neutral-100 dark:bg-neutral-800 text-[var(--rig-text-ink)]">
                     <FolderOpen size={20} />
                   </div>
                   <div className="text-left flex flex-col">
-                    <span className="text-sm font-bold text-[var(--rig-text-ink)] uppercase tracking-wide">Select Document</span>
-                    <span className="text-xs text-[var(--rig-text-ink)] opacity-70">Browse your folders...</span>
+                    <span className="text-sm font-semibold text-[var(--rig-text-ink)]">Select Document</span>
+                    <span className="text-xs text-[var(--rig-text-ink)] opacity-60">Browse your folders...</span>
                   </div>
                 </div>
-                <ArrowRight size={20} className="text-[var(--rig-text-ink)] group-hover:translate-x-1 transition-transform" />
+                <ArrowRight size={20} className="text-[var(--rig-text-ink)] opacity-70 group-hover:translate-x-1 transition-transform" />
               </button>
 
               {/* Drag zone marker */}
