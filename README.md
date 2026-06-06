@@ -14,6 +14,19 @@
 
 **`view.md`** is a premium desktop Markdown reader designed to be your default `.md` handler on Windows. Built to provide a distraction-free, high-performance, and visually gorgeous alternative to firing up full-featured IDEs just to read simple documentation.
 
+## Screenshots
+
+<div align="center">
+  <p><b>Reader Mode</b></p>
+  <img src="assets/Screenshot%201.png" alt="view.md Reader Mode" width="100%">
+  <br><br>
+  <p><b>Split Editor Mode</b></p>
+  <img src="assets/Screenshot%202.png" alt="view.md Split Editor Mode" width="100%">
+  <br><br>
+  <p><b>Focus Mode</b></p>
+  <img src="assets/Screenshot%203.png" alt="view.md Focus Mode" width="100%">
+</div>
+
 ## Features
 
 | Feature | Description |
